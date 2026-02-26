@@ -15,7 +15,7 @@ This project consumes a Django REST API and displays orders in a simple dashboar
 
 ---
 
-## Tech Stack
+## Tech Stack 
 
 - React
 - Vite
