@@ -23,6 +23,7 @@ function CustomersTable({ customers, onDelete, onEdit }) {
             <td>
               <button onClick={() => onEdit(customer)}>Edit</button>
               <button onClick={() => onDelete(customer.id)}>Delete</button>
+              <button onClick={() => navigate(`/customers/${customer.id}`)}>Orders</button>
             </td>
           </tr>
           ))}
