@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Header from "../components/Header";
 import OrdersList from "../components/OrdersList";
 import OrderStats from "../components/OrderStats";
 import { getOrders, completeOrder } from "../api/ordersApi";
@@ -8,7 +7,6 @@ function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     async function fetchOrders() {
       const data = await getOrders();
@@ -19,11 +17,10 @@ function OrdersPage() {
     fetchOrders();
   }, []);
 
-  
   async function handleCompleteOrder(id) {
-    await completeOrder(id);          
-    const data = await getOrders();   
-    setOrders(data);                  
+    await completeOrder(id);
+    const data = await getOrders();
+    setOrders(data);
   }
 
   if (loading) {
@@ -31,10 +28,19 @@ function OrdersPage() {
   }
 
   return (
-    <div>
-      <Header />
-      <OrderStats orders={orders} />
-      <OrdersList orders={orders} onComplete={handleCompleteOrder} />
+    <div className="page">
+      <h1 className="page-title">Orders</h1>
+
+      <div className="grid">
+        <OrderStats orders={orders} />
+      </div>
+
+      <div className="card">
+        <OrdersList
+          orders={orders}
+          onComplete={handleCompleteOrder}
+        />
+      </div>
     </div>
   );
 }

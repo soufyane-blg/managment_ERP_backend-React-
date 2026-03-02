@@ -1,0 +1,301 @@
+/* ===============================
+   THEME VARIABLES (TEAL UI)
+================================ */
+:root {
+    --bg: #cfe8ef;
+    --sidebar-bg: #2f6f7e;
+    --card-bg: #ffffff;
+  
+    --text: #1f3b44;
+    --muted: #4b6b75;
+  
+    --primary: #5fb3c1;
+    --primary-hover: #4fa3b2;
+  
+    --border: #e3edf1;
+  
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #eab308;
+  }
+  
+  /* DARK MODE */
+  [data-theme="dark"] {
+    --bg: #0f2a33;
+    --sidebar-bg: #0b1f26;
+    --card-bg: #132e36;
+  
+    --text: #e6f2f5;
+    --muted: #9fbec7;
+  
+    --primary: #5fb3c1;
+    --primary-hover: #79c7d4;
+  
+    --border: #1e3a42;
+  
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #facc15;
+  }
+  
+  /* ===============================
+     GLOBAL
+  ================================ */
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  
+  /* ===============================
+     LAYOUT
+  ================================ */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* ===============================
+     SIDEBAR
+  ================================ */
+  .sidebar {
+    width: 240px;
+    background: var(--sidebar-bg);
+    padding: 24px;
+    color: #e6f2f5;
+  }
+  
+  .sidebar h2 {
+    margin-bottom: 32px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .sidebar a {
+    display: block;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #cfe8ef;
+    text-decoration: none;
+    margin-bottom: 8px;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+  
+  .sidebar a.active,
+  .sidebar a:hover {
+    background: var(--primary);
+    color: #ffffff;
+  }
+  
+  /* ===============================
+     CONTENT
+  ================================ */
+  .content {
+    flex: 1;
+    padding: 28px;
+  }
+  
+  /* ===============================
+     PAGE
+  ================================ */
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .page-title {
+    font-size: 26px;
+    font-weight: 600;
+  }
+  
+  /* ===============================
+     GENERIC GRID / CARD
+  ================================ */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 20px;
+  }
+  
+  /* ===============================
+     ORDERS (SQUARE CARDS)
+  ================================ */
+  .orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  
+  .order-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .order-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+  }
+  
+  .order-meta {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  
+  .order-card button {
+    width: 100%;
+    margin-top: 14px;
+  }
+  
+  /* ===============================
+     STATUS BADGES
+  ================================ */
+  .badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .badge.completed {
+    background: rgba(22, 163, 74, 0.15);
+    color: var(--success);
+  }
+  
+  .badge.pending {
+    background: rgba(234, 179, 8, 0.15);
+    color: var(--warning);
+  }
+  
+  .badge.cancelled {
+    background: rgba(220, 38, 38, 0.15);
+    color: var(--danger);
+  }
+  
+  /* ===============================
+     FORMS
+  ================================ */
+  .form {
+    display: grid;
+    gap: 14px;
+    max-width: 420px;
+  }
+  
+  .form label {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  
+  .form input {
+    width: 100%;
+    padding: 11px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+  }
+  
+  /* ===============================
+     BUTTONS
+  ================================ */
+  button {
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 11px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+  
+  button:hover {
+    background: var(--primary-hover);
+  }
+  
+  /* ===============================
+     TABLES
+  ================================ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  th,
+  td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  
+  th {
+    color: var(--muted);
+    background: rgba(0, 0, 0, 0.02);
+  }
+  
+  tr:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+  
+  /* ===============================
+     AUTH (LOGIN)
+  ================================ */
+  .auth-layout {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+  }
+  
+  .auth-card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  }
+  
+  .auth-card h2 {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .auth-card button {
+    width: 100%;
+    margin-top: 12px;
+  }
+  
+  .auth-error {
+    color: var(--danger);
+    font-size: 14px;
+    margin-bottom: 12px;
+    text-align: center;
+  }

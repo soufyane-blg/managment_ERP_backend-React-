@@ -29,26 +29,25 @@ function ProductsDashboard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const payload = {
       name,
       price,
       quantity: Number(quantity),
       min_stock_alert: 0,
     };
-  
+
     const csrfToken = getCookie("csrftoken");
-  
+
     try {
       let url = "http://localhost:8000/api/products/";
       let method = "POST";
-  
-      
+
       if (editingProduct) {
         url = `http://localhost:8000/api/products/${editingProduct.id}/`;
         method = "PATCH";
       }
-  
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -58,14 +57,13 @@ function ProductsDashboard() {
         credentials: "include",
         body: JSON.stringify(payload),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to save product");
       }
-  
+
       const savedProduct = await response.json();
-  
-      
+
       if (editingProduct) {
         setProducts(
           products.map((p) =>
@@ -75,14 +73,12 @@ function ProductsDashboard() {
       } else {
         setProducts([...products, savedProduct]);
       }
-  
-      
+
       setName("");
       setPrice("");
       setQuantity("");
       setEditingProduct(null);
       setShowForm(false);
-  
     } catch (error) {
       console.error("Error saving product:", error);
     }
@@ -114,56 +110,62 @@ function ProductsDashboard() {
   };
 
   return (
-    <div>
-      <h1>Products Dashboard</h1>
+    <div className="page">
+      <h1 className="page-title">Products</h1>
 
-      <button onClick={() => setShowForm(true)}>Add Product</button>
+      <button onClick={() => setShowForm(true)}>
+        Add Product
+      </button>
 
       {showForm && (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Name:</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+        <div className="card">
+          <form onSubmit={handleSubmit} className="form">
+            <div>
+              <label>Name</label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
 
-          <div>
-            <label>Price:</label>
-            <input
-              type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
-          </div>
+            <div>
+              <label>Price</label>
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
 
-          <div>
-            <label>Quantity:</label>
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-            />
-          </div>
+            <div>
+              <label>Quantity</label>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+              />
+            </div>
 
-          <button type="submit">
-            {editingProduct ? "Update" : "Save"}
-          </button>
-        </form>
+            <button type="submit">
+              {editingProduct ? "Update" : "Save"}
+            </button>
+          </form>
+        </div>
       )}
 
-      <ProductTable
-        products={products}
-        onDelete={handleDelete}
-        onEdit={(product) => {
-          setEditingProduct(product);
-          setName(product.name);
-          setPrice(product.price);
-          setQuantity(product.quantity);
-          setShowForm(true);
-        }}
-      />
+      <div className="card">
+        <ProductTable
+          products={products}
+          onDelete={handleDelete}
+          onEdit={(product) => {
+            setEditingProduct(product);
+            setName(product.name);
+            setPrice(product.price);
+            setQuantity(product.quantity);
+            setShowForm(true);
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -1,23 +1,35 @@
 import StatusBadge from "./StatusBadge";
 
-
 function OrderCard({ order, onComplete }) {
-    return (
+  return (
+    <div className="order-card">
       <div>
-        <h3>{order.customer}</h3>
-        <p>Total: ${order.total}</p>
-        <p>Status: <StatusBadge status={order.status} /></p>
-        <p>Date: {order.created_at}</p>
-  
-        {order.status === "pending" && (
-        <button onClick={() => onComplete(order.id)}>
-        Complete Order
-        </button>
-        )}
-  
-        <hr />
+        <h3>{order.customer_name}</h3>
+
+        <div className="order-meta">
+          <div>
+            <strong>Total:</strong> ${order.total}
+          </div>
+
+          <div>
+            <strong>Status:</strong>{" "}
+            <StatusBadge status={order.status} />
+          </div>
+
+          <div>
+            <strong>Date:</strong>{" "}
+            {new Date(order.created_at).toLocaleDateString()}
+          </div>
+        </div>
       </div>
-    );
-  }
-  
-  export default OrderCard;
+
+      {order.status === "pending" && (
+        <button onClick={() => onComplete(order.id)}>
+          Complete Order
+        </button>
+      )}
+    </div>
+  );
+}
+
+export default OrderCard;

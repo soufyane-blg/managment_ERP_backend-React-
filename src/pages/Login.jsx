@@ -20,48 +20,44 @@ function Login() {
           "Content-Type": "application/json",
           "X-CSRFToken": getCookie("csrftoken"),
         },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) {
         throw new Error("Invalid credentials");
       }
 
-      
-      navigate("/customers");
+      localStorage.setItem("isAuthenticated", "true");
+      navigate("/home", { replace: true });
+
     } catch (err) {
       setError("Invalid username or password");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="auth-layout">
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h2>Login</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p className="auth-error">{error}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form">
           <label>Username</label>
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-        </div>
 
-        <div>
           <label>Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </div>
 
-        <button type="submit">Login</button>
+          <button type="submit">Login</button>
+        </div>
       </form>
     </div>
   );
