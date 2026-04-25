@@ -5,12 +5,14 @@ import { Outlet } from "react-router-dom";
 
 function MainLayout() {
   return (
-    <div className="layout">
+    <div className="app-layout">
       <Sidebar />
 
-      <div className="content">
+      <div className="main-content">
         <Header />
-        <Outlet />
+        <div className="page-content">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

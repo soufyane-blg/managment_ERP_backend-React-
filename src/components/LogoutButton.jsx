@@ -1,39 +1,23 @@
-function LogoutButton() {
-  const handleLogout = async () => {
-    await fetch("http://localhost:8000/api/logout/", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "X-CSRFToken": getCookie("csrftoken"),
-      },
-    });
+import { useNavigate } from "react-router-dom";
 
-    
+function LogoutButton() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // 🧹 حذف التوكن
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
     localStorage.removeItem("isAuthenticated");
 
-    
-    window.location.href = "/login";
+    // 🔁 إعادة توجيه
+    navigate("/login", { replace: true });
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
-}
-
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name + "=")) {
-        cookieValue = decodeURIComponent(
-          cookie.substring(name.length + 1)
-        );
-        break;
-      }
-    }
-  }
-  return cookieValue;
+  return (
+    <button className="logout-btn" onClick={handleLogout}>
+      Logout
+    </button>
+  );
 }
 
 export default LogoutButton;

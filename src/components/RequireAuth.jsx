@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 const RequireAuth = () => {
-  const isAuth = localStorage.getItem("isAuthenticated");
+  const token = localStorage.getItem("access");
 
-  if (!isAuth) {
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 

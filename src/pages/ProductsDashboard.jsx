@@ -1,32 +1,32 @@
 import { useEffect, useState } from "react";
 import ProductTable from "../components/ProductTable";
+import api from "../api/axios";
 
 function ProductsDashboard() {
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
+  // ✅ GET products
   useEffect(() => {
-    fetch("http://localhost:8000/api/products/", {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products/");
+        console.log("PRODUCTS:", res.data);
+        setProducts(res.data.results || res.data);
+      } catch (error) {
+        console.error("Error fetching products:", error.response);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
+  // ✅ ADD / UPDATE
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,122 +37,110 @@ function ProductsDashboard() {
       min_stock_alert: 0,
     };
 
-    const csrfToken = getCookie("csrftoken");
-
     try {
-      let url = "http://localhost:8000/api/products/";
-      let method = "POST";
+      let res;
 
       if (editingProduct) {
-        url = `http://localhost:8000/api/products/${editingProduct.id}/`;
-        method = "PATCH";
-      }
+        // ✏️ update
+        res = await api.patch(`/products/${editingProduct.id}/`, payload);
 
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-        },
-        credentials: "include",
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save product");
-      }
-
-      const savedProduct = await response.json();
-
-      if (editingProduct) {
-        setProducts(
-          products.map((p) =>
-            p.id === savedProduct.id ? savedProduct : p
+       
+        setProducts((prevProducts) =>
+          (prevProducts || []).map((p) =>
+            p.id === res.data.id ? res.data : p
           )
         );
       } else {
-        setProducts([...products, savedProduct]);
+        // ➕ add
+        res = await api.post("/products/", payload);
+        setProducts([...products, res.data]);
       }
 
-      setName("");
-      setPrice("");
-      setQuantity("");
-      setEditingProduct(null);
-      setShowForm(false);
+      resetForm();
+
     } catch (error) {
-      console.error("Error saving product:", error);
+      console.error("Error saving product:", error.response);
     }
   };
 
+  // ✅ DELETE
   const handleDelete = async (id) => {
     try {
-      const csrfToken = getCookie("csrftoken");
-
-      const response = await fetch(
-        `http://localhost:8000/api/products/${id}/`,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "X-CSRFToken": csrfToken,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to delete product");
-      }
-
+      await api.delete(`/products/${id}/`);
       setProducts(products.filter((p) => p.id !== id));
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error deleting product:", error.response);
     }
+  };
+
+  const resetForm = () => {
+    setName("");
+    setPrice("");
+    setQuantity("");
+    setEditingProduct(null);
+    setShowForm(false);
   };
 
   return (
     <div className="page">
-      <h1 className="page-title">Products</h1>
+      {/* HEADER */}
+      <div className="table-header">
+        <h1 className="page-title">Products</h1>
 
-      <button onClick={() => setShowForm(true)}>
-        Add Product
-      </button>
+        {!showForm && (
+          <button
+            className="add-btn small"
+            onClick={() => setShowForm(true)}
+          >
+            + Add Product
+          </button>
+        )}
+      </div>
 
+      {/* FORM */}
       {showForm && (
-        <div className="card">
+        <div className="card form-card">
           <form onSubmit={handleSubmit} className="form">
-            <div>
-              <label>Name</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+
+            <input
+              placeholder="Product name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <input
+              type="number"
+              placeholder="Price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+
+            <input
+              type="number"
+              placeholder="Quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
+
+            <div className="form-actions">
+              <button type="submit" className="add-btn">
+                {editingProduct ? "Update" : "Save"}
+              </button>
+
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={resetForm}
+              >
+                Cancel
+              </button>
             </div>
 
-            <div>
-              <label>Price</label>
-              <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label>Quantity</label>
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-              />
-            </div>
-
-            <button type="submit">
-              {editingProduct ? "Update" : "Save"}
-            </button>
           </form>
         </div>
       )}
 
+      {/* TABLE */}
       <div className="card">
         <ProductTable
           products={products}
@@ -170,22 +158,4 @@ function ProductsDashboard() {
   );
 }
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name + "=")) {
-        cookieValue = decodeURIComponent(
-          cookie.substring(name.length + 1)
-        );
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
 export default ProductsDashboard;
-  

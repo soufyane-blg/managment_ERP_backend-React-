@@ -4,17 +4,31 @@ import LogoutButton from "../components/LogoutButton";
 function Sidebar() {
   return (
     <aside className="sidebar">
-      <h2>ERP Dashboard</h2>
+      <h2 className="logo">ERP System</h2>
 
-      <NavLink to="/home">Home</NavLink>
-      <NavLink to="/customers">Customers</NavLink>
-      <NavLink to="/products">Products</NavLink>
-      <NavLink to="/orders">Orders</NavLink>
+      <nav className="nav-links">
+        <NavLink to="/home" className="nav-item">
+          Home
+        </NavLink>
 
-      {}
-      <div style={{ margin: "20px 0", borderTop: "1px solid var(--border)" }} />
+        <NavLink to="/customers" className="nav-item">
+          Customers
+        </NavLink>
 
-      <LogoutButton />
+        <NavLink to="/products" className="nav-item">
+          Products
+        </NavLink>
+
+        <NavLink to="/orders" className="nav-item">
+          Orders
+        </NavLink>
+      </nav>
+
+      <div className="divider" />
+
+      <div className="sidebar-footer">
+        <LogoutButton />
+      </div>
     </aside>
   );
 }

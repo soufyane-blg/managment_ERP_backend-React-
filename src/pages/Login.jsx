@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 function Login() {
   const navigate = useNavigate();
@@ -7,77 +8,74 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    console.log("STEP 1");
+  
     setError("");
-
+    setLoading(true);
+  
     try {
-      const response = await fetch("http://localhost:8000/api/login/", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCookie("csrftoken"),
-        },
-        body: JSON.stringify({ username, password }),
+      console.log("STEP 2");
+  
+      const res = await api.post("/auth/token/", {
+        username,
+        password,
       });
-
-      if (!response.ok) {
-        throw new Error("Invalid credentials");
-      }
-
-      localStorage.setItem("isAuthenticated", "true");
+  
+      console.log("STEP 3", res.data);
+  
+      localStorage.setItem("access", res.data.access);
+      localStorage.setItem("refresh", res.data.refresh);
+  
+      console.log("STEP 4 BEFORE NAV");
+  
       navigate("/home", { replace: true });
-
+  
+      console.log("STEP 5 AFTER NAV");
+  
     } catch (err) {
-      setError("Invalid username or password");
+      console.log("ERROR:", err);
+    } finally {
+      console.log("STEP 6 FINALLY");
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-layout">
+    <div className="auth-container">
+      {/* ✅ هنا التعديل */}
       <form className="auth-card" onSubmit={handleSubmit}>
-        <h2>Login</h2>
+        <h2>Log in</h2>
 
         {error && <p className="auth-error">{error}</p>}
 
         <div className="form">
-          <label>Username</label>
+
           <input
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
 
-          <label>Password</label>
           <input
             type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button type="submit">Login</button>
+          {/* ✅ احذف onClick */}
+          <button type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Login"}
+          </button>
+
         </div>
       </form>
     </div>
   );
 }
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name + "=")) {
-        cookieValue = decodeURIComponent(
-          cookie.substring(name.length + 1)
-        );
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
 export default Login;
