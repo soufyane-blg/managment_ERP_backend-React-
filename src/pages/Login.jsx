@@ -22,7 +22,7 @@ function Login() {
       console.log("STEP 2");
   
       // في ملف تسجيل الدخول
-    const res = await api.post("/token/", { username, password }); 
+      const res = await api.post("/auth/token/", { username, password }); 
 
 
   
