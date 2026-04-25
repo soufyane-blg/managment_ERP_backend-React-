@@ -21,10 +21,10 @@ function Login() {
     try {
       console.log("STEP 2");
   
-      const res = await api.post("/auth/token/", {
-        username,
-        password,
-      });
+      // في ملف تسجيل الدخول
+    const res = await api.post("/token/", { username, password }); 
+
+
   
       console.log("STEP 3", res.data);
   
