@@ -58,7 +58,7 @@ function OrdersPage() {
     e.preventDefault();
 
     try {
-      const res = await api.patch("/orders/", {
+      const res = await api.post("/orders/", {
         customer_id: Number(customerId),
         items: [
           {

@@ -10,6 +10,6 @@ export const getOrders = async () => {
 
 // ✅ COMPLETE ORDER
 export const completeOrder = async (id) => {
-  const res = await api.patch(`/orders/${id}/complete/`);
+  const res = await api.post(`/orders/${id}/complete/`);
   return res.data;
 };
